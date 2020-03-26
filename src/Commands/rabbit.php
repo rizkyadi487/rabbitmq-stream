@@ -11,7 +11,7 @@ class rabbit extends Command
      *
      * @var string
      */
-    protected $signature = 'asdf:asdf';
+    protected $signature = 'consume:rabbitmq';
 
     /**
      * The console command description.
@@ -37,11 +37,11 @@ class rabbit extends Command
      */
     public function handle()
     {
-        define('RABBITMQ_HOST', '127.0.0.1');
+        define('RABBITMQ_HOST', '172.17.1.35');
         define('RABBITMQ_PORT', '5672');
-        define('RABBITMQ_USERNAME', 'guest');
-        define('RABBITMQ_PASSWORD', 'guest');
-        define('EXCHANGE_NAME', 'logs');
+        define('RABBITMQ_USERNAME', 'rizky');
+        define('RABBITMQ_PASSWORD', 'rizky123123');
+        define('EXCHANGE_NAME', 'maxwell');
 
         $connection = new \PhpAmqpLib\Connection\AMQPStreamConnection(
             RABBITMQ_HOST, 
@@ -69,7 +69,7 @@ class rabbit extends Command
             false  # auto delete
         );
 
-        $channel->queue_bind($queue_name, 'logs');
+        $channel->queue_bind($queue_name, 'maxwell');
         print 'Waiting for logs. To exit press CTRL+C' . PHP_EOL;
 
         $callback = function($msg){

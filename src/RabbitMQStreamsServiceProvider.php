@@ -80,6 +80,7 @@ class RabbitMQStreamsServiceProvider extends ServiceProvider
         // $this->commands([]);
         $this->commands([
             \rizkyadi487\RabbitMQStreams\Commands\rabbit::class,
+            \rizkyadi487\RabbitMQStreams\Commands\RabbitMQListen::class,
         ]);
     }
 }
