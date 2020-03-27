@@ -3,7 +3,7 @@
 namespace rizkyadi487\RabbitMQStreams\Commands;
 
 use Illuminate\Console\Command;
-use \rizkyadi487\RabbitMQStreams\RabbitMQService;
+use \rizkyadi487\RabbitMQStreams\Services\RabbitMQ\RabbitMQService;
 
 class RabbitMQListen extends Command
 {
