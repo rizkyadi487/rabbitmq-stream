@@ -9,36 +9,27 @@ class RabbitMQService
 {
     private $rabbitmqHandlerService;
 
-    private $rabbitServer;
     private $rabbitHost;
     private $rabbitPort;
-    private $binary;
     private $rabbitUsername;
     private $rabbitPassword;
-    private $binaryPath;
-    private $topic;
+    private $rabbitExname;
+    private $rabbitExtype;
 
-    public function __construct($topic = null)
+    public function __construct($exname = null, $extype = null)
     {
-        // $this->rabbitHandlerService = app()->make(RabbitMQHandlerService::class);
+        $this->rabbitmqHandlerService = app()->make(RabbitMQHandlerService::class);
 
-        $this->rabbitServer = env('RABBITMQ_HOST', '127.0.0.1') . ':' . env('RABBITMQ_PORT', '5672');
         $this->rabbitHost = env('RABBITMQ_HOST', '127.0.0.1');
         $this->rabbitPort = env('RABBITMQ_PORT', '5672');
         $this->rabbitUsername = env('RABBITMQ_USERNAME', 'guest');
         $this->rabbitPassword = env('RABBITMQ_PASSWORD', 'guest');
-        // $this->binaryPath = env('RABBITMQ_CONSUMER_BINARY_PATH', '');
-        // $this->binary = env('RABBITMQ_CONSUMER_BINARY', 'rabbit-console-consumdasder');
-
-
-        $this->topic = $topic;
+        $this->rabbitExname = $exname;
+        $this->rabbitExtype = $extype;
     }
 
     public function consumeTopics()
     {
-        if(empty($this->topic))
-            throw new \Exception('please specify a topic to consumer with --topic options');
-
         $this->handleConsumer();
     }
 
@@ -54,8 +45,8 @@ class RabbitMQService
         $channel = $connection->channel();
 
         $channel->exchange_declare(
-            $this->topic, 
-            'fanout', # type
+            $this->rabbitExname, 
+            $this->rabbitExtype, 
             false,    # passive
             false,    # durable
             false     # auto_delete
@@ -69,11 +60,12 @@ class RabbitMQService
             false  # auto delete
         );
 
-        $channel->queue_bind($queue_name, $this->topic);
-        print 'Waiting for logs. To exit press CTRL+C' . PHP_EOL;
+        $channel->queue_bind($queue_name, $this->rabbitExname);
+        echo "Waiting for logs. To exit press CTRL+C";
 
         $callback = function($msg){
-            print "Read: " . $msg->body . PHP_EOL;
+            $this->rabbitmqHandlerService->handleMessage($msg->body);
+            // print "Read: " . $msg->body . PHP_EOL;
         };
 
         $channel->basic_consume(
@@ -93,14 +85,14 @@ class RabbitMQService
 
         $channel->close();
         $connection->close();
-        // $process = new Process($this->binaryPath . $this->binary . ' --bootstrap-server ' . $this->kafkaServer . ' --property schema.registry.url=http://' . $this->kafkaHost . ':8081 --topic ' . $this->topic);
+        // $process = new Process($this->binaryPath . $this->binary . ' --bootstrap-server ' . $this->kafkaServer . ' --property schema.registry.url=http://' . $this->kafkaHost . ':8081 --topic ' . $this->rabbitExname);
         // $process->setTimeout(0);
 
         // $process->start();
 
         // foreach ($process as $type => $message) {
         //     if ($process::OUT === $type) {
-        //         $this->kafkaHandlerService->handleMessage($message, $this->topic);
+        //         $this->kafkaHandlerService->handleMessage($message, $this->rabbitExname);
         //     } else { // $process::ERR === $type
         //         echo "\nRead from stderr: " . $message;
         //     }

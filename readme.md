@@ -15,17 +15,17 @@ Via Composer
 $ composer require rizkyadi487/rabbitmqstreams
 ```
 
-## Usage
+## Configure RabbitMQ and RabbitMQStreams
+RABBITMQ_HOST=127.0.0.1
+RABBITMQ_PORT=5672
+RABBITMQ_USERNAME=guest
+RABBITMQ_PASSWORD=guest
+RABBITMQ_EXCHANGE_NAME=maxwell
+RABBITMQ_EXCHANGE_TYPE=fanout
 
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
-
-## Testing
-
-``` bash
-$ composer test
-```
 
 ## Contributing
 
@@ -37,8 +37,7 @@ If you discover any security related issues, please email author email instead o
 
 ## Credits
 
-- [author name][link-author]
-- [All Contributors][link-contributors]
+- [rizkyadi487][https://github.com/rizkyadi487]
 
 ## License
 
