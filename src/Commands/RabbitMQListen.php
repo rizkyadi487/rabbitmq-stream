@@ -5,8 +5,7 @@ namespace rizkyadi487\RabbitMQStreams\Commands;
 use Illuminate\Console\Command;
 use \rizkyadi487\RabbitMQStreams\Services\RabbitMQ\RabbitMQService;
 
-class RabbitMQListen extends Command
-{
+class RabbitMQListen extends Command{
     /**
      * The name and signature of the console command.
      *
@@ -26,8 +25,7 @@ class RabbitMQListen extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
     }
 
@@ -36,8 +34,7 @@ class RabbitMQListen extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle(){
         $exname = $this->option('exname');
         $extype = $this->option('type');
         if($exname==null){

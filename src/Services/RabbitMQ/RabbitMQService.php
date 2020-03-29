@@ -5,8 +5,7 @@ namespace rizkyadi487\RabbitMQStreams\Services\RabbitMQ;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Symfony\Component\Process\Process;
 
-class RabbitMQService
-{
+class RabbitMQService{
     private $rabbitmqHandlerService;
 
     private $rabbitHost;
@@ -16,8 +15,7 @@ class RabbitMQService
     private $rabbitExname;
     private $rabbitExtype;
 
-    public function __construct($exname = null, $extype = null)
-    {
+    public function __construct($exname = null, $extype = null){
         $this->rabbitmqHandlerService = app()->make(RabbitMQHandlerService::class);
 
         $this->rabbitHost = env('RABBITMQ_HOST', '127.0.0.1');
@@ -28,13 +26,11 @@ class RabbitMQService
         $this->rabbitExtype = $extype;
     }
 
-    public function consumeTopics()
-    {
+    public function consumeTopics(){
         $this->handleConsumer();
     }
 
-    protected function handleConsumer()
-    {
+    protected function handleConsumer(){
          $connection = new AMQPStreamConnection(
             $this->rabbitHost, 
             $this->rabbitPort, 
@@ -65,7 +61,6 @@ class RabbitMQService
 
         $callback = function($msg){
             $this->rabbitmqHandlerService->handleMessage($msg->body);
-            // print "Read: " . $msg->body . PHP_EOL;
         };
 
         $channel->basic_consume(
@@ -78,8 +73,7 @@ class RabbitMQService
             $callback
         );
 
-        while (count($channel->callbacks)) 
-        {
+        while (count($channel->callbacks)) {
             $channel->wait();
         }
 
@@ -99,21 +93,11 @@ class RabbitMQService
         // }
     }
 
-    public function getTopics()
-    {
+    public function getTopics(){
         //memberikan list exchangename
     }
 
-    // private function getTablesForStreaming()
-    // {
-    //     $topics = [];
+    private function getTablesForStreaming(){
 
-    //     $tables = explode(',', env('DEBEZIUM_DB_STREAMING_TABLE'));
-
-    //     foreach ($tables as $table) {
-    //         $topic = env('DEBEZIUM_DB_SERVER_NAME') . '.' . env('DEBEZIUM_DB_DATABASE') . '.' . $table;
-    //         array_push($topics, $topic);
-    //     }
-    //     return $topics;
-    // }
+    }
 }

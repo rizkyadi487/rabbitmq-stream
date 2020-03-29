@@ -7,6 +7,9 @@
 
 This is where your description should go. Take a look at [contributing.md](contributing.md) to see a to do list.
 
+## Requirements
+Laravel 5.8
+
 ## Installation
 
 Via Composer
@@ -16,12 +19,16 @@ $ composer require rizkyadi487/rabbitmqstreams
 ```
 
 ## Configure RabbitMQ and RabbitMQStreams
+``` bash
 RABBITMQ_HOST=127.0.0.1
 RABBITMQ_PORT=5672
 RABBITMQ_USERNAME=guest
 RABBITMQ_PASSWORD=guest
 RABBITMQ_EXCHANGE_NAME=maxwell
 RABBITMQ_EXCHANGE_TYPE=fanout
+
+
+```
 
 ## Change log
 
@@ -43,6 +50,7 @@ If you discover any security related issues, please email author email instead o
 
 license. Please see the [license file](license.md) for more information.
 
+This package inspired from https://github.com/michael158/laravel-debeziumstream
 [ico-version]: https://img.shields.io/packagist/v/rizkyadi487/rabbitmqstreams.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rizkyadi487/rabbitmqstreams.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/rizkyadi487/rabbitmqstreams/master.svg?style=flat-square

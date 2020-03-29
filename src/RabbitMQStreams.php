@@ -2,7 +2,6 @@
 
 namespace rizkyadi487\RabbitMQStreams;
 
-class RabbitMQStreams
-{
+class RabbitMQStreams{
     // Build wonderful things
 }
