@@ -6,51 +6,51 @@ use Illuminate\Support\Facades\DB;
 use stdClass;
 
 class RabbitMQHandlerService{
+
+    private $connection;
+
     public function __construct(){
-        //TODO memebuat koneksi database target
+        $this->connection =  env('RABBITMQ_CONNECTION', 'mysql');
     }
 
     public function handleMessage($message){
         $dataMessage = $this->proccessAndGetData(json_decode($message, true));
 
         //CREATE//
-        if($dataMessage[0]['type']=='insert'){
-            $this->handleCreate(null, null);
+        if($dataMessage->type == 'insert'){
+            $this->handleCreate($dataMessage);
         }
 
         //UPDATE//
-        if($dataMessage[0]['type']=='update'){
-            echo "\nUpdating";
+        if($dataMessage->type == 'update'){
+            $this->handleUpdate($dataMessage);
         }
 
         //DELETE//
-        if($dataMessage=='delete'){
-            echo "\nDeleting";
+        if($dataMessage->type == 'delete'){
+            $this->handleDelete($dataMessage);
         }
     }
 
+    protected function handleCreate($data){
+        DB::connection($this->connection)->table($data->database.'.'.$data->table)->insert($data->data);
+    }
+
+    protected function handleUpdate($data){
+        DB::connection($this->connection)->table($data->database.'.'.$data->table)->where('id',$data->data['id'])->update($data->data);
+    }
+
+    protected function handleDelete($data){
+        DB::connection($this->connection)->table($data->database.'.'.$data->table)->where('id',$data->data['id'])->delete();
+    }
+
     public function proccessAndGetData($data){
-        //TODO processing data
-        // $returnData = new stdClass();
-        $returnData[]=[
-            'type' => $data['type'],
-            'data' => $data['data'],
-        ];
-        
+        $returnData = new stdClass();
+        $returnData->database = $data['database'];
+        $returnData->table = $data['table'];
+        $returnData->type = $data['type'];
+        $returnData->data = $data['data'];
+        $returnData->old = isset($data['old']) ? $data['old'] : null;
         return $returnData;
-    }
-
-    protected function handleCreate($after, $topic){
-        // $this->instanceClass->{$this->config['event_methods']['create']}($after, $topic);
-        //test create
-        DB::connection('mysql')->insert("INSERT INTO laravel.newtable (`data`) VALUES('berhasil insert')");
-    }
-
-    protected function handleUpdate($before, $after, $topic){
-        // $this->instanceClass->{$this->config['event_methods']['update']}($before, $after, $topic);
-    }
-
-    protected function handleDelete($before, $topic){
-        // $this->instanceClass->{$this->config['event_methods']['delete']}($before, $topic);
     }
 }

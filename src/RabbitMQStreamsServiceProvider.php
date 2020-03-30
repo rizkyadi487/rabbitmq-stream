@@ -51,7 +51,6 @@ class RabbitMQStreamsServiceProvider extends ServiceProvider{
         ], 'rabbitmqstreams.config');
 
         $this->commands([
-            \rizkyadi487\RabbitMQStreams\Commands\rabbit::class,
             \rizkyadi487\RabbitMQStreams\Commands\RabbitMQListen::class,
         ]);
     }
