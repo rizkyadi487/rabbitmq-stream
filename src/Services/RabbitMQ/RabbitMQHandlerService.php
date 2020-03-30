@@ -8,9 +8,11 @@ use stdClass;
 class RabbitMQHandlerService{
 
     private $connection;
+    private $id;
 
     public function __construct(){
         $this->connection =  env('RABBITMQ_CONNECTION', 'mysql');
+        $this->id = env('RABBITMQ_PRIMARY_KEY', 'id');
     }
 
     public function handleMessage($message){
@@ -37,11 +39,11 @@ class RabbitMQHandlerService{
     }
 
     protected function handleUpdate($data){
-        DB::connection($this->connection)->table($data->database.'.'.$data->table)->where('id',$data->data['id'])->update($data->data);
+        DB::connection($this->connection)->table($data->database.'.'.$data->table)->where($this->id,$data->data[$this->id])->update($data->data);
     }
 
     protected function handleDelete($data){
-        DB::connection($this->connection)->table($data->database.'.'.$data->table)->where('id',$data->data['id'])->delete();
+        DB::connection($this->connection)->table($data->database.'.'.$data->table)->where($this->id,$data->data[$this->id])->delete();
     }
 
     public function proccessAndGetData($data){
