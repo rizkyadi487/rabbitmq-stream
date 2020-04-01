@@ -11,7 +11,7 @@ class RabbitMQListen extends Command{
      *
      * @var string
      */
-    protected $signature = 'rabbitmq:listen {--exname=} {--type=}';
+    protected $signature = 'rabbitmq:listen {--queuename=} {--debug=}';
 
     /**
      * The console command description.
@@ -35,22 +35,16 @@ class RabbitMQListen extends Command{
      * @return mixed
      */
     public function handle(){
-        $exname = $this->option('exname');
-        $extype = $this->option('type');
-        if($exname==null){
-            $exname = env('RABBITMQ_EXCHANGE_NAME', 'maxwell');
-            if($exname==null){
-                throw new \Exception('please specify a exchange name to consumer with --exname options');
+        $qname = $this->option('queuename');
+        $debug = $this->option('debug');
+        if($qname==null){
+            $qname = env('RABBITMQ_QUEUE_NAME', 'maxwell');
+            if($qname==null){
+                throw new \Exception('please specify a queue name to consumer with --exname options');
             }
         }
-        if($extype==null){
-            $extype = env('RABBITMQ_EXCHANGE_TYPE', 'fanout');
-            if($extype==null){
-                throw new \Exception('please specify a exchange name to consumer with --extype options');
-            }
-        }
-        $this->info("Init rabbitmq consumer work : { $exname : $extype }");
-        $service = new RabbitMQService($exname,$extype);
+        $this->info("Init rabbitmq consumer work : { $qname,$debug }");
+        $service = new RabbitMQService($qname,$debug);
         $service->consumeTopics();
     }
 }

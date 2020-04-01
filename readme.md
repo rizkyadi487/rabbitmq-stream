@@ -24,12 +24,19 @@ RABBITMQ_HOST=127.0.0.1
 RABBITMQ_PORT=5672
 RABBITMQ_USERNAME=guest
 RABBITMQ_PASSWORD=guest
-RABBITMQ_EXCHANGE_NAME=maxwell
-RABBITMQ_EXCHANGE_TYPE=fanout
+RABBITMQ_QUEUE_NAME=demoqueue
 RABBITMQ_CONNECTION=mysql
 RABBITMQ_PRIMARY_KEY=id
-
 ```
+
+## Command
+``` bash
+php artisan rabbitmq:listen 
+```
+| option | function |
+--- | --- |
+| --queuename | for specific queue |
+| --debug | for showing the messages |
 
 ## Change log
 
@@ -45,7 +52,6 @@ If you discover any security related issues, please email author email instead o
 
 ## Credits
 
-- [rizkyadi487][https://github.com/rizkyadi487]
 
 ## License
 

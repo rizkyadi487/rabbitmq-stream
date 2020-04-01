@@ -6,3 +6,8 @@ All notable changes to `RabbitMQStreams` will be documented in this file.
 
 ### Added
 - Everything
+
+## Version 1.1
+
+### Added
+- Change from event listener to queue consumer
